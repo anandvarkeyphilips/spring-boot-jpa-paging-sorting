@@ -1,10 +1,11 @@
 package com.bezkoder.spring.data.jpa.pagingsorting.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "tutorials")
-public class Tutorial {
+public class Tutorial implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

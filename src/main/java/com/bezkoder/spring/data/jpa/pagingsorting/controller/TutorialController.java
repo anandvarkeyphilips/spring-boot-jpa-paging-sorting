@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.bezkoder.spring.data.jpa.pagingsorting.service.TutorialService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,13 +31,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bezkoder.spring.data.jpa.pagingsorting.model.Tutorial;
 import com.bezkoder.spring.data.jpa.pagingsorting.repository.TutorialRepository;
 
+@Slf4j
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class TutorialController {
 
   @Autowired
-  TutorialRepository tutorialRepository;
+  private TutorialRepository tutorialRepository;
+  @Autowired
+  private TutorialService tutorialService;
 
   private Sort.Direction getSortDirection(String direction) {
     if (direction.equals("asc")) {
@@ -43,6 +49,12 @@ public class TutorialController {
       return Sort.Direction.DESC;
     }
     return Sort.Direction.ASC;
+  }
+
+  @Cacheable(value = "tutorials-simple")
+  @GetMapping("/tutorials/simple")
+  public List<Tutorial> getAllTutorials(){
+    return tutorialRepository.findAll();
   }
 
   @GetMapping("/tutorials")
@@ -60,22 +72,16 @@ public class TutorialController {
         }
       }
 
-      Pageable pagingSort = PageRequest.of(page, size, Sort.by(orders));
-      Page<Tutorial> pageTuts;
-      if (title == null)
-        pageTuts = tutorialRepository.findAll(pagingSort);
-      else
-        pageTuts = tutorialRepository.findByTitleContaining(title, pagingSort);
-
-      List<Tutorial> tutorials = pageTuts.getContent();
+      Page<Tutorial> tutorials = tutorialService.getTutorials(title,  PageRequest.of(page, size, Sort.by(orders)));
 
       Map<String, Object> response = new HashMap<>();
       response.put("tutorials", tutorials);
-      response.put("currentPage", pageTuts.getNumber());
-      response.put("totalItems", pageTuts.getTotalElements());
-      response.put("totalPages", pageTuts.getTotalPages());
+      response.put("currentPage", tutorials.getNumber());
+      response.put("totalItems", tutorials.getTotalElements());
+      response.put("totalPages", tutorials.getTotalPages());
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch (Exception e) {
+      log.error("Error",e);
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
