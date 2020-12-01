@@ -17,7 +17,7 @@ public class Tutorial {
   private String description;
 
   @Column(name = "published")
-  private boolean published;
+  private Boolean published;
 
   public Tutorial() {
 

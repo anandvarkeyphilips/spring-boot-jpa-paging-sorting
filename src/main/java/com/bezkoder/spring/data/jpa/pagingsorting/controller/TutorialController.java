@@ -88,13 +88,13 @@ public class TutorialController {
 
       if (sort[0].contains(",")) {
         // will sort more than 2 fields
-        // sortOrder="field, direction"
+        // sortOrder="field,direction"
         for (String sortOrder : sort) {
           String[] _sort = sortOrder.split(",");
           orders.add(new Order(getSortDirection(_sort[1]), _sort[0]));
         }
       } else {
-        // sort=[field, direction]
+        // sort=[field,direction]
         orders.add(new Order(getSortDirection(sort[1]), sort[0]));
       }
 
