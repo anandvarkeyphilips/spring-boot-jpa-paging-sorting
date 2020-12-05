@@ -1,35 +1,23 @@
 package com.bezkoder.spring.data.jpa.pagingsorting.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import com.bezkoder.spring.data.jpa.pagingsorting.model.ResponseModel;
+import com.bezkoder.spring.data.jpa.pagingsorting.model.Tutorial;
+import com.bezkoder.spring.data.jpa.pagingsorting.repository.TutorialRepository;
 import com.bezkoder.spring.data.jpa.pagingsorting.service.TutorialService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.bezkoder.spring.data.jpa.pagingsorting.model.Tutorial;
-import com.bezkoder.spring.data.jpa.pagingsorting.repository.TutorialRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:8081")
@@ -57,32 +45,32 @@ public class TutorialController {
     return tutorialRepository.findAll();
   }
 
+  //@Cacheable(value = "tutorials-with-pagination") not working due string array
   @GetMapping("/tutorials")
-  public ResponseEntity<Map<String, Object>> getAllTutorialsPage(
+  public ResponseModel getAllTutorialsPage(
       @RequestParam(required = false) String title,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "3") int size,
       @RequestParam(defaultValue = "id,desc") String[] sort) {
     try {
-      List<Order> orders = new ArrayList<Order>();
+      List<Order> orders = new ArrayList<>();
       for (String sortOrder : sort) {
         if (sort[0].contains(",")) {
-          String[] _sort = sortOrder.split(",");
-          orders.add(new Order(getSortDirection(_sort[1]), _sort[0]));
+          String[] sort_components = sortOrder.split(",");
+          orders.add(new Order(getSortDirection(sort_components[1]), sort_components[0]));
         }
       }
-
       Page<Tutorial> tutorials = tutorialService.getTutorials(title,  PageRequest.of(page, size, Sort.by(orders)));
-
-      Map<String, Object> response = new HashMap<>();
-      response.put("tutorials", tutorials);
-      response.put("currentPage", tutorials.getNumber());
-      response.put("totalItems", tutorials.getTotalElements());
-      response.put("totalPages", tutorials.getTotalPages());
-      return new ResponseEntity<>(response, HttpStatus.OK);
+      ResponseModel<Tutorial> responseModel = new ResponseModel<>();
+      responseModel.setElements(tutorials.getContent());
+      responseModel.setPageNumber(tutorials.getNumber());
+      responseModel.setTotalPages(tutorials.getTotalPages());
+      responseModel.setPageSize(tutorials.getSize());
+      responseModel.setTotalElements(tutorials.getTotalElements());
+      return responseModel;
     } catch (Exception e) {
       log.error("Error",e);
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      return null;
     }
   }
 
