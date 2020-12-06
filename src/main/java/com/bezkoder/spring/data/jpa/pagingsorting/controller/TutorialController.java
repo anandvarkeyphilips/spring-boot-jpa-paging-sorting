@@ -4,6 +4,7 @@ import com.bezkoder.spring.data.jpa.pagingsorting.model.ResponseModel;
 import com.bezkoder.spring.data.jpa.pagingsorting.model.Tutorial;
 import com.bezkoder.spring.data.jpa.pagingsorting.repository.TutorialRepository;
 import com.bezkoder.spring.data.jpa.pagingsorting.service.TutorialService;
+import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +53,8 @@ public class TutorialController {
       @RequestParam(required = false) String title,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "3") int size,
-      @RequestParam(defaultValue = "id,desc") String[] sort) {
+      @RequestParam(defaultValue = "id,desc") String[] sort,
+      @QuerydslPredicate(root = Tutorial.class) Predicate predicate) {
     try {
       List<Order> orders = new ArrayList<>();
       for (String sortOrder : sort) {
@@ -60,7 +63,7 @@ public class TutorialController {
           orders.add(new Order(getSortDirection(sort_components[1]), sort_components[0]));
         }
       }
-      Page<Tutorial> tutorials = tutorialService.getTutorials(title,  PageRequest.of(page, size, Sort.by(orders)));
+      Page<Tutorial> tutorials = tutorialService.getTutorials(title,  PageRequest.of(page, size, Sort.by(orders)), predicate);
       ResponseModel<Tutorial> responseModel = new ResponseModel<>();
       responseModel.setElements(tutorials.getContent());
       responseModel.setPageNumber(tutorials.getNumber());
