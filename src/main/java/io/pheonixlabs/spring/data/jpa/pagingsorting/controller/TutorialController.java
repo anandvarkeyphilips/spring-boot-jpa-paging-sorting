@@ -1,10 +1,10 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.controller;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.controller;
 
-import com.bezkoder.spring.data.jpa.pagingsorting.model.ResponseModel;
-import com.bezkoder.spring.data.jpa.pagingsorting.model.Tutorial;
-import com.bezkoder.spring.data.jpa.pagingsorting.repository.TutorialRepository;
-import com.bezkoder.spring.data.jpa.pagingsorting.service.TutorialService;
 import com.querydsl.core.types.Predicate;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.model.ResponseModel;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.model.Tutorial;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.repository.TutorialRepository;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.service.TutorialService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

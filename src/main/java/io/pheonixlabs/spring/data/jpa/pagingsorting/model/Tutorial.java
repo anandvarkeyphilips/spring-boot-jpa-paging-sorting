@@ -1,11 +1,14 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.model;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.model;
 
 import com.querydsl.core.annotations.QueryEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 @Getter

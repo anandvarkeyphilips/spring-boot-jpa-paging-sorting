@@ -1,4 +1,4 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.config;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.config;
 
 import org.springframework.context.annotation.Configuration;
 

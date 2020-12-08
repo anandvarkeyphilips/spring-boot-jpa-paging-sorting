@@ -1,6 +1,6 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.repository;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.repository;
 
-import com.bezkoder.spring.data.jpa.pagingsorting.model.Tutorial;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.model.Tutorial;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

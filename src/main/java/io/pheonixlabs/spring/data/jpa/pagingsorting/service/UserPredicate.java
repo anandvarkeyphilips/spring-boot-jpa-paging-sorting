@@ -1,22 +1,22 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.service;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.service;
 
-import com.bezkoder.spring.data.jpa.pagingsorting.model.MyUser;
-import com.bezkoder.spring.data.jpa.pagingsorting.model.SearchCriteria;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.model.SearchCriteria;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.model.User;
 
-public class MyUserPredicate {
+public class UserPredicate {
 
     private SearchCriteria criteria;
 
-    public MyUserPredicate(final SearchCriteria criteria) {
+    public UserPredicate(final SearchCriteria criteria) {
         this.criteria = criteria;
     }
 
     public BooleanExpression getPredicate() {
-        final PathBuilder<MyUser> entityPath = new PathBuilder<>(MyUser.class, "myUser");
+        final PathBuilder<User> entityPath = new PathBuilder<>(User.class, "myUser");
 
         if (isNumeric(criteria.getValue().toString())) {
             final NumberPath<Integer> path = entityPath.getNumber(criteria.getKey(), Integer.class);

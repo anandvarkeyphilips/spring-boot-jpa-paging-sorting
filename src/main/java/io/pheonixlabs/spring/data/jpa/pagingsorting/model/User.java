@@ -1,4 +1,4 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.model;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.model;
 
 import com.querydsl.core.annotations.QueryEntity;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @QueryEntity
-public class MyUser  implements Serializable {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

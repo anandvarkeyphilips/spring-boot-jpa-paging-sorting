@@ -1,8 +1,8 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.service;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.service;
 
-import com.bezkoder.spring.data.jpa.pagingsorting.model.Tutorial;
-import com.bezkoder.spring.data.jpa.pagingsorting.repository.TutorialRepository;
 import com.querydsl.core.types.Predicate;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.model.Tutorial;
+import io.pheonixlabs.spring.data.jpa.pagingsorting.repository.TutorialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
