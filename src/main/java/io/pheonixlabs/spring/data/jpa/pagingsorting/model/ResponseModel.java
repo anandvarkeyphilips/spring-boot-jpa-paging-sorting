@@ -1,4 +1,4 @@
-package com.bezkoder.spring.data.jpa.pagingsorting.model;
+package io.pheonixlabs.spring.data.jpa.pagingsorting.model;
 
 import lombok.Getter;
 import lombok.Setter;
